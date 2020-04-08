@@ -17,7 +17,7 @@
 
 <p>
 
-<h1>GNOMAD VCF file</h1>
+<h1>Covid19 VCF file</h1>
 
 <div id="igvDiv" style="padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray"></div>
 
@@ -38,6 +38,16 @@
                 tracks:
                     [
                        {
+                            name: "Genes",
+                            type: "annotation",
+                            format: "bed",
+                            url: getLocation() + "/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz",
+                            indexURL: getLocation() + "/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz.tbi",
+                            order: Number.MAX_VALUE,
+                            visibilityWindow: 300000000,
+                            displayMode: "EXPANDED"
+                       },
+                       {
                            type: "variant",
                            format: "vcf",
                            url: getLocation() + "/data/original_snps.vcf.gz",
@@ -46,7 +56,7 @@
                            squishedCallHeight: 1,
                            expandedCallHeight: 4,
                            displayMode: "squished",
-                           visibilityWindow: 1000
+                           visibilityWindow: 30000
                        }
                     ]
             };

@@ -23,7 +23,7 @@ class variationutils:
 
 
     def add_header(self):
-        header = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<meta name=\"description\" content=\"\">\n<meta name=\"author\" content=\"\">\n<link rel=\"shortcut icon\" href=\"https://igv.org/web/img/favicon.ico\">\n<title>igv.js</title>\n<script src=\"dist/igv.min.js\"></script>\n</head>\n<body>\n<p>\n<h1>GNOMAD VCF file</h1>\n<div id=\"igvDiv\" style=\"padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray\"></div>"
+        header = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<meta name=\"description\" content=\"\">\n<meta name=\"author\" content=\"\">\n<link rel=\"shortcut icon\" href=\"https://igv.org/web/img/favicon.ico\">\n<title>igv.js</title>\n<script src=\"dist/igv.min.js\"></script>\n</head>\n<body>\n<p>\n<h1>Covid19 VCF file</h1>\n<div id=\"igvDiv\" style=\"padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray\"></div>"
         return header
 
     def add_reference_genome(self):
@@ -31,32 +31,37 @@ class variationutils:
         return reference_genome
 
     def add_variant_track(self):
-        track = "\ntracks:\n[\n{\ntype: \"variant\",\nformat: \"vcf\",\nurl: getLocation() + \"/data/original_snps.vcf.gz\",\nindexURL: getLocation() + \"/data/original_snps.vcf.gz.tbi\",\nname: \"snps.vcf\", \nsquishedCallHeight: 1, \nexpandedCallHeight: 4, \ndisplayMode: \"squished\", \nvisibilityWindow: 1000 \n} \n]"
-        return track          
+        variant_track = "{\ntype: \"variant\",\nformat: \"vcf\",\nurl: getLocation() + \"/data/original_snps.vcf.gz\",\nindexURL: getLocation() + \"/data/original_snps.vcf.gz.tbi\",\nname: \"snps.vcf\", \nsquishedCallHeight: 1, \nexpandedCallHeight: 4, \ndisplayMode: \"squished\", \nvisibilityWindow: 30000 \n} \n]"
+        return variant_track          
+
+    def add_gene_track(self):
+        gene_track = "\ntracks:\n[\n\n{ \nname: \"Genes\",\ntype: \"annotation\",\nformat: \"bed\",\nurl: getLocation() + \"/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz\",\nindexURL: getLocation() + \"/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz.tbi\",\norder: Number.MAX_VALUE,\nvisibilityWindow: 300000000,\ndisplayMode: \"EXPANDED\"\n},"
+        return gene_track
 
     def add_javascript_code(self):
         jscode = "\n<script type=\"text/javascript\"> \nfunction getLocation() { \n return location.href \n} \ndocument.addEventListener(\"DOMContentLoaded\", function () { \nvar options = \n{"
         jscode += self.add_reference_genome()
+        jscode += self.add_gene_track()
         jscode += self.add_variant_track()
-        jscode += "\n}; \nvar igvDiv = document.getElementById(\"igvDiv\"); \nigv.createBrowser(igvDiv, options) \n.then(function (browser) { \nconsole.log(\"Created IGV browser\"); \n})"
+        jscode += "\n}; \nvar igvDiv = document.getElementById(\"igvDiv\"); \nigv.createBrowser(igvDiv, options) \n.then(function (browser) { \nconsole.log(\"Created IGV browser\"); \n})\n})"
         return jscode
 
     def add_footer(self):
-        footer = "\n</body>\n</html>\n</script>\n"
+        footer = "\n</script></body>\n</html>\n\n"
         return footer
 
-    def create_html(self, output_dir, trackname):
+    def create_html(self, output_dir, gene_file, variant_file):
         '''
         function for updating json file with track information
         '''
         htmlfile = self.add_header()
         htmlfile += self.add_javascript_code()
         htmlfile += self.add_footer()
-        f= open(output_dir+"/igv_output/index.html","w")
+        f= open(output_dir+"/igv_output/index.html", "w")
         f.write(htmlfile)
         f.close()   
         
 
 #vu = variationutils()
-#file = vu.create_html("outdir","snp")
+#file = vu.create_html(".","gbk", "snp")
 #print(file)

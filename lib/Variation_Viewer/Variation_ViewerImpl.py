@@ -68,7 +68,7 @@ class Variation_Viewer:
         destination = outputdir +"/igv_output"
         
         os.system("cp -r " + source +" "+ destination)
-        self.vu.create_html(outputdir, "snp")  #hardcoded for testing
+        self.vu.create_html(outputdir, "gbk", "snp")  #hardcoded for testing
         
         output = self.hr.create_html_report(self.callback_url, outputdir, workspace) 
         report = KBaseReport(self.callback_url)
