@@ -63,6 +63,11 @@ class Variation_Viewer:
         workspace = params['workspace_name']
         outputdir = self.shared_folder + '/' + str(uuid.uuid1())
         os.mkdir(outputdir)
+        self.du.download_genome(params)
+
+        params['variation_name'] = "snps.vcf"   #hardcode for testing
+        self.du.download_vcf(params)
+
          # Source path
         source = "/kb/module/deps/igv_output/"
 
@@ -70,6 +75,10 @@ class Variation_Viewer:
         destination = outputdir +"/igv_output"
         
         os.system("cp -r " + source +" "+ destination)
+        self.vu.copy_file("/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa", outputdir+"/igv_output/data/") #hardcode for testing
+        self.vu.prepare_genome(outputdir,"GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa") #hardcode for testing
+        self.vu.prepare_vcf(outputdir,"original_snps.vcf")  #hardcode for testing
+        self.vu.prepare_vcf(outputdir,"GCA_009858895.3_ASM985889v3_genomic.bed") #hardcode for testing
         self.vu.create_html(outputdir, "gbk", "snp")  #hardcoded for testing
         
         output = self.hr.create_html_report(self.callback_url, outputdir, workspace) 

@@ -1,4 +1,6 @@
 import os
+import subprocess
+
 class variationutils:
     def __init__(self):
         pass
@@ -10,21 +12,38 @@ class variationutils:
         '''
         function for preparing genome
         '''
-        cmd = "samtools faidx " + genome_file
-        os.system(cmd)
+        cmd = "samtools faidx " + output_dir+"/igv_output/data/"+genome_file
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        print (stdout)
+        #os.system(cmd)   #use subprocess instead
+
+    def bgzip_vcf(self, output_dir, vcf_file):
+        '''
+        function for zipping vcf file
+        '''
+        zipcmd = "bgzip "  + output_dir + "/igv_output/data/"+vcf_file
+        zipprocess = subprocess.Popen(zipcmd, shell=True, stdout=subprocess.PIPE)
+        stdout, stderr = zipprocess.communicate()
+        print (stdout)
+
+    def index_vcf(self, output_dir, vcf_file):
+        '''
+        function for indexing vcf file
+        '''
+        indexcmd = "tabix -p vcf " + output_dir + "/igv_output/data/"+vcf_file+".gz"
+        indexprocess = subprocess.Popen(indexcmd, shell=True, stdout=subprocess.PIPE)
+        stdout, stderr = indexprocess.communicate()
+        print (stdout)
 
     def prepare_vcf(self, output_dir, vcf_file):
         '''
         function for preparing vcf file
         '''
-        #os.system("cp /kb/module/test/sample_data/snps.vcf " + output_dir + "/igv_output/data")
-        #os.system("cp /kb/module/work/tmp/*_vcf/original_snps.vcf " + output_dir + "/igv_output/data")
-        zipcmd = "bgzip "  + output_dir + "/igv_output/data/"+vcf_file
-        os.system(zipcmd)
-        indexcmd = "tabix -p vcf " + output_dir + "/igv_output/data/"+vcf_file+".gz"
-        os.system(indexcmd)
-
-
+        self.copy_file("/kb/module/test/sample_data/"+ vcf_file, output_dir + "/igv_output/data" )  #hardcoded for testing
+        self.bgzip_vcf(output_dir, vcf_file)
+        self.index_vcf(output_dir, vcf_file)
+       
     def add_header(self):
         header = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<meta name=\"description\" content=\"\">\n<meta name=\"author\" content=\"\">\n<link rel=\"shortcut icon\" href=\"https://igv.org/web/img/favicon.ico\">\n<title>igv.js</title>\n<script src=\"dist/igv.min.js\"></script>\n</head>\n<body>\n<p>\n<h1>Covid19 VCF file</h1>\n<div id=\"igvDiv\" style=\"padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray\"></div>"
         return header
@@ -66,8 +85,8 @@ class variationutils:
         
 
 vu = variationutils()
-#vu.prepare_genome(".","./igv_output/data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa")
-vu.copy_file("/home/manish//Desktop/apps/Variation_Viewer/deps/igv_output/data/original_snps.vcf.gz", "/home/manish/Desktop/apps/Variation_Viewer/lib/Variation_Viewer/Utils/igv_output/data/original_snps.vcf.gz")
-#vu.prepare_vcf(".","original_snps.vcf")
+vu.prepare_genome(".","./igv_output/data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa")
+#vu.copy_file("/home/manish//Desktop/apps/Variation_Viewer/deps/igv_output/data/original_snps.vcf.gz", "/home/manish/Desktop/apps/Variation_Viewer/lib/Variation_Viewer/Utils/igv_output/data/original_snps.vcf.gz")
+vu.prepare_vcf(".","original_snps.vcf")
 #file = vu.create_html(".","gbk", "snp")
 #print(file)
