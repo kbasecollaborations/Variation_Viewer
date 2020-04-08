@@ -5,6 +5,7 @@ import os
 import uuid
 
 from Variation_Viewer.Utils.htmlreportutils import htmlreportutils
+from Variation_Viewer.Utils.variationutils import variationutils
 from installed_clients.KBaseReportClient import KBaseReport
 #END_HEADER
 
@@ -38,6 +39,7 @@ class Variation_Viewer:
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
         self.hr = htmlreportutils()
+        self.vu  = variationutils()
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         #END_CONSTRUCTOR
@@ -64,10 +66,13 @@ class Variation_Viewer:
 
         # Destination path
         destination = outputdir +"/igv_output"
-
+        
         os.system("cp -r " + source +" "+ destination)
+        self.vu.create_html(outputdir, "snp")  #hardcoded for testing
+        
         output = self.hr.create_html_report(self.callback_url, outputdir, workspace) 
         report = KBaseReport(self.callback_url)
+
         '''
         report_info = report.create({'report': {'objects_created':[],
                                                 'text_message': params['parameter_1']},
