@@ -40,7 +40,7 @@ class variationutils:
         '''
         function for preparing vcf file
         '''
-        self.copy_file("/kb/module/test/sample_data/"+ vcf_file, output_dir + "/igv_output/data" )  #hardcoded for testing
+        #self.copy_file("/kb/module/test/sample_data/"+ vcf_file, output_dir + "/igv_output/data" )  #hardcoded for testing
         self.bgzip_vcf(output_dir, vcf_file)
         self.index_vcf(output_dir, vcf_file)
        
@@ -61,7 +61,7 @@ class variationutils:
         return gene_track
 
     def add_javascript_code(self,genome_file):
-        jscode = "\n<script type=\"text/javascript\"> \nfunction getLocation() { \n return location.href \n} \ndocument.addEventListener(\"DOMContentLoaded\", function () { \nvar options = \n{"
+        jscode = "\n<script type=\"text/javascript\"> \nfunction getLocation() { \n return (location.href).replace(\"/index.html\",\"\") \n} \ndocument.addEventListener(\"DOMContentLoaded\", function () { \nvar options = \n{"
         jscode += self.add_reference_genome(genome_file)
         jscode += self.add_gene_track()
         jscode += self.add_variant_track()

@@ -22,7 +22,10 @@ class downloaddatautils:
         return file
 
     def download_vcf(self, params):
-        params['input_var_ref'] = params['vcf_ref']
-        vcf_file = self.vu.export_variation_as_vcf(params)
+        #params['input_var_ref'] = params['vcf_ref']
+        params['variation_ref'] = params['vcf_ref']
+        params['filename'] = 'corona'
+        vcf_file = self.vu.get_variation_as_vcf(params)
+        #vcf_file = self.vu.export_variation_as_vcf(params)
         return vcf_file
 

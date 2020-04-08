@@ -1,0 +1,30 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##fileDate=20200403
+##source=freeBayes v1.3.1-dirty
+##reference=reference/ref.fa
+##contig=<ID=MN908947.3,length=29903>
+##phasing=none
+##commandline="freebayes -p 2 -P 0 -C 2 -F 0.05 --min-coverage 10 --min-repeat-entropy 1.0 -q 13 -m 60 --strict-vcf -f reference/ref.fa snps.bam --region MN908947.3:0-2033"
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Total read depth at the locus">
+##INFO=<ID=RO,Number=1,Type=Integer,Description="Count of full observations of the reference haplotype.">
+##INFO=<ID=AO,Number=A,Type=Integer,Description="Count of full observations of this alternate haplotype.">
+##INFO=<ID=QR,Number=1,Type=Integer,Description="Reference allele quality sum in phred">
+##INFO=<ID=QA,Number=A,Type=Integer,Description="Alternate allele quality sum in phred">
+##INFO=<ID=AB,Number=A,Type=Float,Description="Allele balance at heterozygous sites: a number between 0 and 1 representing the ratio of reads showing the reference allele to all reads, considering only reads from individuals called as heterozygous">
+##INFO=<ID=TYPE,Number=A,Type=String,Description="The type of allele, either snp, mnp, ins, del, or complex.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GL,Number=G,Type=Float,Description="Genotype Likelihood, log10-scaled likelihoods of the data given the called genotype for each possible genotype generated from the reference and alternate alleles given the sample ploidy">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">
+##FORMAT=<ID=RO,Number=1,Type=Integer,Description="Reference allele observation count">
+##FORMAT=<ID=QR,Number=1,Type=Integer,Description="Sum of quality of the reference observations">
+##FORMAT=<ID=AO,Number=A,Type=Integer,Description="Alternate allele observation count">
+##FORMAT=<ID=QA,Number=A,Type=Integer,Description="Sum of quality of the alternate observations">
+##bcftools_viewVersion=1.10.2+htslib-1.10.2
+##bcftools_viewCommand=view --include 'FMT/GT="1/1" && QUAL>=100 && FMT/DP>=10 && (FMT/AO)/(FMT/DP)>=0' snps.raw.vcf; Date=Fri Apr  3 17:21:57 2020
+##bcftools_annotateVersion=1.10.2+htslib-1.10.2
+##bcftools_annotateCommand=annotate --remove ^INFO/TYPE,^INFO/DP,^INFO/RO,^INFO/AO,^INFO/AB,^FORMAT/GT,^FORMAT/DP,^FORMAT/RO,^FORMAT/AO,^FORMAT/QR,^FORMAT/QA,^FORMAT/GL; Date=Fri Apr  3 17:21:58 2020
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	snippy_output
+MN908947.3	8782	.	C	T	26431.9	.	AB=0;AO=832;DP=833;QA=29517;QR=36;RO=1;TYPE=snp	GT:DP:RO:QR:AO:QA:GL	1/1:833:1:36:832:29517:-2651.74,-247.16,0
+MN908947.3	18060	.	C	T	25465.8	.	AB=0;AO=797;DP=801;QA=28394;QR=15;RO=1;TYPE=snp	GT:DP:RO:QR:AO:QA:GL	1/1:801:1:15:797:28394:-2552.77,-238.88,0
+MN908947.3	28144	.	T	C	69424	.	AB=0;AO=2196;DP=2199;QA=77328;QR=72;RO=2;TYPE=snp	GT:DP:RO:QR:AO:QA:GL	1/1:2199:2:72:2196:77328:-6949.11,-655.034,0
