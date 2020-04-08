@@ -7,7 +7,7 @@ from installed_clients.VariationUtilClient import VariationUtil
 from installed_clients.AssemblyUtilClient import AssemblyUtil
 
 
-class Downloaddatautils:
+class downloaddatautils:
 
     def __init__(self):
         self.callbackURL = os.environ['SDK_CALLBACK_URL']

@@ -6,6 +6,7 @@ import uuid
 
 from Variation_Viewer.Utils.htmlreportutils import htmlreportutils
 from Variation_Viewer.Utils.variationutils import variationutils
+from Variation_Viewer.Utils.downloaddatautils import downloaddatautils
 from installed_clients.KBaseReportClient import KBaseReport
 #END_HEADER
 
@@ -39,7 +40,8 @@ class Variation_Viewer:
         self.callback_url = os.environ['SDK_CALLBACK_URL']
         self.shared_folder = config['scratch']
         self.hr = htmlreportutils()
-        self.vu  = variationutils()
+        self.vu = variationutils()
+        self.du = downloaddatautils()
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         #END_CONSTRUCTOR

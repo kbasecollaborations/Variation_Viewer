@@ -1,24 +1,27 @@
-
+import os
 class variationutils:
     def __init__(self):
         pass
+
+    def copy_file(self, src, dest):
+        os.system("cp " + src + " " +dest)
 
     def prepare_genome(self, output_dir, genome_file):
         '''
         function for preparing genome
         '''
-        cmd = "samtools faidx " + "/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa_assembly.fa  --output " + output_dir + "/igv_output/data"
+        cmd = "samtools faidx " + genome_file
         os.system(cmd)
 
     def prepare_vcf(self, output_dir, vcf_file):
         '''
         function for preparing vcf file
         '''
-        os.system("cp /kb/module/test/sample_data/snps.vcf " + output_dir + "/igv_output/data")
-        os.system("cp /kb/module/work/tmp/*_vcf/original_snps.vcf " + output_dir + "/igv_output/data")
-        zipcmd = "bgzip "  + output_dir + "/jbrowse/data/original_snps.vcf"
+        #os.system("cp /kb/module/test/sample_data/snps.vcf " + output_dir + "/igv_output/data")
+        #os.system("cp /kb/module/work/tmp/*_vcf/original_snps.vcf " + output_dir + "/igv_output/data")
+        zipcmd = "bgzip "  + output_dir + "/igv_output/data/"+vcf_file
         os.system(zipcmd)
-        indexcmd = "tabix -p vcf " + output_dir + "/jbrowse/data/original_snps.vcf.gz"
+        indexcmd = "tabix -p vcf " + output_dir + "/igv_output/data/"+vcf_file+".gz"
         os.system(indexcmd)
 
 
@@ -62,6 +65,9 @@ class variationutils:
         f.close()   
         
 
-#vu = variationutils()
+vu = variationutils()
+#vu.prepare_genome(".","./igv_output/data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa")
+vu.copy_file("/home/manish//Desktop/apps/Variation_Viewer/deps/igv_output/data/original_snps.vcf.gz", "/home/manish/Desktop/apps/Variation_Viewer/lib/Variation_Viewer/Utils/igv_output/data/original_snps.vcf.gz")
+#vu.prepare_vcf(".","original_snps.vcf")
 #file = vu.create_html(".","gbk", "snp")
 #print(file)
