@@ -44,27 +44,27 @@ class variationutils:
         self.bgzip_vcf(output_dir, vcf_file)
         self.index_vcf(output_dir, vcf_file)
        
-    def add_header(self):
-        header = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<meta name=\"description\" content=\"\">\n<meta name=\"author\" content=\"\">\n<link rel=\"shortcut icon\" href=\"https://igv.org/web/img/favicon.ico\">\n<title>igv.js</title>\n<script src=\"dist/igv.min.js\"></script>\n</head>\n<body>\n<p>\n<h1>Covid19 VCF file</h1>\n<div id=\"igvDiv\" style=\"padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray\"></div>"
+    def add_header(self,genome_file):
+        header = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<meta name=\"description\" content=\"\">\n<meta name=\"author\" content=\"\">\n<link rel=\"shortcut icon\" href=\"https://igv.org/web/img/favicon.ico\">\n<title>igv.js</title>\n<script src=\"dist/igv.min.js\"></script>\n</head>\n<body>\n<p>\n<h1>"+ genome_file +"VCF file</h1>\n<div id=\"igvDiv\" style=\"padding-top: 10px;padding-bottom: 10px; border:1px solid lightgray\"></div>"
         return header
 
     def add_reference_genome(self, genome_file):
-        reference_genome = "\nreference:\n{\nid: \"covid19\",\nfastaURL: getLocation() + \"/data/"+genome_file+"\"\n},"
+        reference_genome = "\nreference:\n{\nid: \""+genome_file.split("_")[0]+"\",\nfastaURL: getLocation() + \"/data/"+genome_file+"\"\n},"
         return reference_genome
 
-    def add_variant_track(self):
-        variant_track = "{\ntype: \"variant\",\nformat: \"vcf\",\nurl: getLocation() + \"/data/original_snps.vcf.gz\",\nindexURL: getLocation() + \"/data/original_snps.vcf.gz.tbi\",\nname: \"snps.vcf\", \nsquishedCallHeight: 1, \nexpandedCallHeight: 4, \ndisplayMode: \"squished\", \nvisibilityWindow: 30000 \n} \n]"
+    def add_variant_track(self, variant_file):
+        variant_track = "{\ntype: \"variant\",\nformat: \"vcf\",\nurl: getLocation() + \"/data/"+variant_file+".gz\",\nindexURL: getLocation() + \"/data/"+variant_file+".gz.tbi\",\nname: \"snps.vcf\", \nsquishedCallHeight: 1, \nexpandedCallHeight: 4, \ndisplayMode: \"squished\", \nvisibilityWindow: 30000 \n} \n]"
         return variant_track          
 
-    def add_gene_track(self):
-        gene_track = "\ntracks:\n[\n\n{ \nname: \"Genes\",\ntype: \"annotation\",\nformat: \"bed\",\nurl: getLocation() + \"/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz\",\nindexURL: getLocation() + \"/data/GCA_009858895.3_ASM985889v3_genomic.bed.gz.tbi\",\norder: Number.MAX_VALUE,\nvisibilityWindow: 300000000,\ndisplayMode: \"EXPANDED\"\n},"
+    def add_gene_track(self, gene_file):
+        gene_track = "\ntracks:\n[\n\n{ \nname: \"Genes\",\ntype: \"annotation\",\nformat: \"bed\",\nurl: getLocation() + \"/data/"+gene_file+".gz\",\nindexURL: getLocation() + \"/data/" +gene_file+".gz.tbi\",\norder: Number.MAX_VALUE,\nvisibilityWindow: 300000000,\ndisplayMode: \"EXPANDED\"\n},"
         return gene_track
 
-    def add_javascript_code(self,genome_file):
+    def add_javascript_code(self, gene_file, variant_file, genome_file):
         jscode = "\n<script type=\"text/javascript\"> \nfunction getLocation() { \n return (location.href).replace(\"/index.html\",\"\") \n} \ndocument.addEventListener(\"DOMContentLoaded\", function () { \nvar options = \n{"
         jscode += self.add_reference_genome(genome_file)
-        jscode += self.add_gene_track()
-        jscode += self.add_variant_track()
+        jscode += self.add_gene_track(gene_file)
+        jscode += self.add_variant_track(variant_file)
         jscode += "\n}; \nvar igvDiv = document.getElementById(\"igvDiv\"); \nigv.createBrowser(igvDiv, options) \n.then(function (browser) { \nconsole.log(\"Created IGV browser\"); \n})\n})"
         return jscode
 
@@ -76,8 +76,8 @@ class variationutils:
         '''
         function for updating json file with track information
         '''
-        htmlfile = self.add_header()
-        htmlfile += self.add_javascript_code(genome_file)
+        htmlfile = self.add_header(genome_file)
+        htmlfile += self.add_javascript_code(gene_file, variant_file, genome_file)
         htmlfile += self.add_footer()
         f= open(output_dir+"/igv_output/index.html", "w")
         f.write(htmlfile)
