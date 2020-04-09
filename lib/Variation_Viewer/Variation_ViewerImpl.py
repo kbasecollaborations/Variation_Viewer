@@ -7,6 +7,7 @@ import uuid
 from Variation_Viewer.Utils.htmlreportutils import htmlreportutils
 from Variation_Viewer.Utils.variationutils import variationutils
 from Variation_Viewer.Utils.downloaddatautils import downloaddatautils
+from Variation_Viewer.Utils.genomeutils import genomeutils
 from installed_clients.KBaseReportClient import KBaseReport
 #END_HEADER
 
@@ -42,6 +43,7 @@ class Variation_Viewer:
         self.hr = htmlreportutils()
         self.vu = variationutils()
         self.du = downloaddatautils()
+        self.gu = genomeutils()
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         #END_CONSTRUCTOR
