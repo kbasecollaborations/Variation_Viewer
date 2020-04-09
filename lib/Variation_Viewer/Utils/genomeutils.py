@@ -17,6 +17,6 @@ class genomeutils:
         #return bed_file
 
 
-gu = genomeutils()
-gu.gff2bed("/home/manish/Desktop/apps/Variation_Viewer/deps/igv_output/tmp/GCA_009858895.3_ASM985889v3_genomic.gff")
+#gu = genomeutils()
+#gu.gff2bed("/home/manish/Desktop/apps/Variation_Viewer/deps/igv_output/tmp/GCA_009858895.3_ASM985889v3_genomic.gff")
 
