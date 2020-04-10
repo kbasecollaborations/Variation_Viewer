@@ -79,8 +79,9 @@ class Variation_Viewer:
         vcf_file = vcf_path.split("/")[-1]
 
         # igv tool  path
-        src = "/kb/module/deps/igv_output/"
-        dest = outputdir +"/igv_output"
+        src = "/kb/module/deps/igv_output"
+        dest = outputdir
+        #dest = outputdir +"/igv_output"
 
         try:
            logging.info('Copying directory: %s to %s', src, dest)
