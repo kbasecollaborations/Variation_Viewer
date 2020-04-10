@@ -13,7 +13,7 @@ class variationutils:
            print("Unable to copy file. %s" % e)
         except:
            print("Unexpected error:", sys.exc_info())
-       
+
 
     def prepare_genome(self, output_dir, genome_file):
         '''

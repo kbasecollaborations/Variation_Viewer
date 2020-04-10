@@ -1,4 +1,3 @@
-
 class genomeutils:
 
     def __init__(self):
@@ -24,10 +23,7 @@ class genomeutils:
 
         except IOError:
             print("could not read input gff file\n")
-        fw.close()
+
+            fw.close()
 
         return bed_file
-
-
-
-
