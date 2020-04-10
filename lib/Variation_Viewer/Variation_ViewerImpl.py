@@ -59,6 +59,7 @@ class Variation_Viewer:
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
+
         # ctx is the context object
         # return variables are: output
         #BEGIN run_Variation_Viewer
@@ -83,8 +84,8 @@ class Variation_Viewer:
 
         shutil.copytree(src,dest)
         logging.info("copying igv tools ...")
-        self.vu.copy_file(genome_path, outputdir+"/igv_output/data/")
-        self.vu.copy_file(vcf_path, outputdir+"/igv_output/data/")
+        self.vu.copy_file(genome_path, outputdir+"/igv_output/data/"+genome_file)
+        self.vu.copy_file(vcf_path, outputdir+"/igv_output/data/"+vcf_file)
 
         logging.info("prepare input data ...")
 
