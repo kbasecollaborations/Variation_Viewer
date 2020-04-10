@@ -82,7 +82,8 @@ class Variation_Viewer:
         src = "/kb/module/deps/igv_output/"
         dest = outputdir +"/igv_output"
 
-        shutil.copytree(src,dest)
+        os.system("cp -r " + src + " " + dest)
+        #shutil.copytree(src,dest)
         logging.info("copying igv tools ...")
         self.vu.copy_file(genome_path, outputdir+"/igv_output/data/"+genome_file)
         self.vu.copy_file(vcf_path, outputdir+"/igv_output/data/"+vcf_file)
