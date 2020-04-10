@@ -64,6 +64,7 @@ class Variation_Viewer:
         # return variables are: output
         #BEGIN run_Variation_Viewer
         workspace = params['workspace_name']
+        vu.validate_params(params)
         outputdir = self.shared_folder + '/' + str(uuid.uuid1())
         os.mkdir(outputdir)
 

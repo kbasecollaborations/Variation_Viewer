@@ -6,6 +6,12 @@ class variationutils:
     def __init__(self):
         pass
 
+    def validate_params(self, params):
+        if 'vcf_ref' not in params:
+            raise ValueError('required vcf_ref field was not defined')
+        elif 'genome_or_assembly_ref' not in params:
+            raise ValueError('required genome_or_assembly_ref field was not defined')
+
     def copy_file(self, src, dest):
         try:
            shutil.copy(src,dest)
