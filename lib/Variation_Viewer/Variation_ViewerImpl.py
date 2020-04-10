@@ -91,12 +91,13 @@ class Variation_Viewer:
         self.vu.prepare_genome(outputdir, genome_file)
         self.vu.prepare_vcf(outputdir, vcf_file)
 
-        gff_file = "/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.gff"  #hardcode for testing
-        bed_file = self.gu.gff2bed(gff_file,outputdir)
-        src_path = "/kb/module/test/sample_data"                                          #hardcode for testing
-        self.vu.copy_file(src_path+"/"+bed_file,outputdir + "/igv_output/data/")
-        self.vu.prepare_vcf(outputdir,bed_file)
-
+        #gff_file = "/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.gff"  #hardcode for testing
+        #bed_file = self.gu.gff2bed(gff_file,outputdir)
+        #src_path = "/kb/module/test/sample_data"                                          #hardcode for testing
+        #self.vu.copy_file(src_path+"/"+bed_file,outputdir + "/igv_output/data/")
+        #self.vu.prepare_vcf(outputdir,bed_file)
+        
+        bed_file = "dummy name"  #will be added for organism with genome
         logging.info("prepare input data ...")
         self.vu.create_html(outputdir, bed_file, vcf_file, genome_file)
 

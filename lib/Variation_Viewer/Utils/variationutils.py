@@ -87,7 +87,7 @@ class variationutils:
         return header
 
     def add_reference_genome(self, genome_file):
-        reference_genome = "\nreference:\n{\nid: \""+genome_file.split("_")[0]+"\",\nfastaURL: getLocation() + \"/data/"+genome_file+"\"\n},"
+        reference_genome = "\nreference:\n{\nid: \""+genome_file.split("_")[0]+"\",\nfastaURL: getLocation() + \"/data/"+genome_file+"\"\n},\ntracks:\n[\n\n"
         return reference_genome
 
     def add_variant_track(self, variant_file):
@@ -95,13 +95,13 @@ class variationutils:
         return variant_track          
 
     def add_gene_track(self, gene_file):
-        gene_track = "\ntracks:\n[\n\n{ \nname: \"Genes\",\ntype: \"annotation\",\nformat: \"bed\",\nurl: getLocation() + \"/data/"+gene_file+".gz\",\nindexURL: getLocation() + \"/data/" +gene_file+".gz.tbi\",\norder: Number.MAX_VALUE,\nvisibilityWindow: 300000000,\ndisplayMode: \"EXPANDED\"\n},"
+        gene_track = "{ \nname: \"Genes\",\ntype: \"annotation\",\nformat: \"bed\",\nurl: getLocation() + \"/data/"+gene_file+".gz\",\nindexURL: getLocation() + \"/data/" +gene_file+".gz.tbi\",\norder: Number.MAX_VALUE,\nvisibilityWindow: 300000000,\ndisplayMode: \"EXPANDED\"\n},"
         return gene_track
 
     def add_javascript_code(self, gene_file, variant_file, genome_file):
         jscode = "\n<script type=\"text/javascript\"> \nfunction getLocation() { \n return (location.href).replace(\"/index.html\",\"\") \n} \ndocument.addEventListener(\"DOMContentLoaded\", function () { \nvar options = \n{"
         jscode += self.add_reference_genome(genome_file)
-        jscode += self.add_gene_track(gene_file)
+        #jscode += self.add_gene_track(gene_file)
         jscode += self.add_variant_track(variant_file)
         jscode += "\n}; \nvar igvDiv = document.getElementById(\"igvDiv\"); \nigv.createBrowser(igvDiv, options) \n.then(function (browser) { \nconsole.log(\"Created IGV browser\"); \n})\n})"
         return jscode
