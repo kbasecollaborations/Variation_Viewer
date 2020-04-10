@@ -3,7 +3,7 @@
 import logging
 import os
 import uuid
-
+import shutil 
 from Variation_Viewer.Utils.htmlreportutils import htmlreportutils
 from Variation_Viewer.Utils.variationutils import variationutils
 from Variation_Viewer.Utils.downloaddatautils import downloaddatautils
@@ -65,41 +65,45 @@ class Variation_Viewer:
         workspace = params['workspace_name']
         outputdir = self.shared_folder + '/' + str(uuid.uuid1())
         os.mkdir(outputdir)
+
+        logging.info("Downlading assembly ...")
         genome_info = self.du.download_genome(params)
         genome_path = genome_info['path']
         genome_file = genome_path.split("/")[-1]
-        params['variation_name'] = "snps.vcf"   #hardcode for testing
+
+        logging.info("downloading variants ...")
+        params['variation_name'] = "snps.vcf"
         vcf_info = self.du.download_vcf(params)
         vcf_path = vcf_info['path']
         vcf_file = vcf_path.split("/")[-1]
 
-         # Source path
-        source = "/kb/module/deps/igv_output/"
+        # igv tool  path
+        src = "/kb/module/deps/igv_output/"
+        dest = outputdir +"/igv_output"
 
-        # Destination path
-        destination = outputdir +"/igv_output"
-        
-        os.system("cp -r " + source +" "+ destination)
-        self.vu.copy_file(genome_path, outputdir+"/igv_output/data/") #hardcode for testing
+        shutil.copytree(src,dest)
+        logging.info("copying igv tools ...")
+        self.vu.copy_file(genome_path, outputdir+"/igv_output/data/")
         self.vu.copy_file(vcf_path, outputdir+"/igv_output/data/")
-        self.vu.copy_file("/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.bed",outputdir+"/igv_output/data/")
-        self.vu.prepare_genome(outputdir, genome_file) #hardcode for testing
-        self.vu.prepare_vcf(outputdir, vcf_file)  #hardcode for testing
-        self.vu.prepare_vcf(outputdir,"GCA_009858895.3_ASM985889v3_genomic.bed") #hardcode for testing
-        self.vu.create_html(outputdir, "GCA_009858895.3_ASM985889v3_genomic.bed", vcf_file, genome_file)  #hardcoded for testing
-        
+
+        logging.info("prepare input data ...")
+
+        self.vu.prepare_genome(outputdir, genome_file)
+        self.vu.prepare_vcf(outputdir, vcf_file)
+
+        gff_file = "/kb/module/test/sample_data/GCA_009858895.3_ASM985889v3_genomic.gff"  #hardcode for testing
+        bed_file = self.gu.gff2bed(gff_file,outputdir)
+        src_path = "/kb/module/test/sample_data"                                          #hardcode for testing
+        self.vu.copy_file(src_path+"/"+bed_file,outputdir + "/igv_output/data/")
+        self.vu.prepare_vcf(outputdir,bed_file)
+
+        logging.info("prepare input data ...")
+        self.vu.create_html(outputdir, bed_file, vcf_file, genome_file)
+
+        logging.info("creating html report ...")
         output = self.hr.create_html_report(self.callback_url, outputdir, workspace) 
         report = KBaseReport(self.callback_url)
 
-        '''
-        report_info = report.create({'report': {'objects_created':[],
-                                                'text_message': params['parameter_1']},
-                                                'workspace_name': params['workspace_name']})
-                                                
-        output = {
-            'report_name': report_info['name'],
-            'report_ref': report_info['ref'],
-        }'''
         #END run_Variation_Viewer
 
         # At some point might do deeper type checking...

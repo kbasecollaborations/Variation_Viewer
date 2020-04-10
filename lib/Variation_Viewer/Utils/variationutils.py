@@ -1,4 +1,5 @@
-import os
+import sys
+import shutil
 import subprocess
 
 class variationutils:
@@ -6,41 +7,78 @@ class variationutils:
         pass
 
     def copy_file(self, src, dest):
-        os.system("cp " + src + " " +dest)
+        try:
+           shutil.copy(src,dest)
+        except IOError as e:
+           print("Unable to copy file. %s" % e)
+        except:
+           print("Unexpected error:", sys.exc_info())
+       
 
     def prepare_genome(self, output_dir, genome_file):
         '''
         function for preparing genome
         '''
         cmd = "samtools faidx " + output_dir+"/igv_output/data/"+genome_file
-        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        print (stdout)
-        #os.system(cmd)   #use subprocess instead
+        try:
+           process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+           stdout, stderr = process.communicate()
+           if stdout:
+               print ("ret> ", process.returncode)
+               print ("OK> output ", stdout)
+           if stderr:
+               print ("ret> ", process.returncode)
+               print ("Error> error ", stderr.strip())
+
+        except OSError as e:
+           print ("OSError > ", e.errno)
+           print ("OSError > ", e.strerror)
+           print ("OSError > ", e.filename)
 
     def bgzip_vcf(self, output_dir, vcf_file):
         '''
         function for zipping vcf file
         '''
         zipcmd = "bgzip "  + output_dir + "/igv_output/data/"+vcf_file
-        zipprocess = subprocess.Popen(zipcmd, shell=True, stdout=subprocess.PIPE)
-        stdout, stderr = zipprocess.communicate()
-        print (stdout)
+        try:
+            process = subprocess.Popen(zipcmd, shell=True, stdout=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if stdout:
+                print("ret> ", process.returncode)
+                print("OK> output ", stdout)
+            if stderr:
+                print("ret> ", process.returncode)
+                print("Error> error ", stderr.strip())
+
+        except OSError as e:
+            print("OSError > ", e.errno)
+            print("OSError > ", e.strerror)
+            print("OSError > ", e.filename)
 
     def index_vcf(self, output_dir, vcf_file):
         '''
         function for indexing vcf file
         '''
         indexcmd = "tabix -p vcf " + output_dir + "/igv_output/data/"+vcf_file+".gz"
-        indexprocess = subprocess.Popen(indexcmd, shell=True, stdout=subprocess.PIPE)
-        stdout, stderr = indexprocess.communicate()
-        print (stdout)
+        try:
+            process = subprocess.Popen(indexcmd, shell=True, stdout=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if stdout:
+                print("ret> ", process.returncode)
+                print("OK> output ", stdout)
+            if stderr:
+                print("ret> ", process.returncode)
+                print("Error> error ", stderr.strip())
+
+        except OSError as e:
+            print("OSError > ", e.errno)
+            print("OSError > ", e.strerror)
+            print("OSError > ", e.filename)
 
     def prepare_vcf(self, output_dir, vcf_file):
         '''
         function for preparing vcf file
         '''
-        #self.copy_file("/kb/module/test/sample_data/"+ vcf_file, output_dir + "/igv_output/data" )  #hardcoded for testing
         self.bgzip_vcf(output_dir, vcf_file)
         self.index_vcf(output_dir, vcf_file)
        
@@ -74,19 +112,13 @@ class variationutils:
 
     def create_html(self, output_dir, gene_file, variant_file, genome_file):
         '''
-        function for updating json file with track information
+        function for creating index.html file with track information
         '''
         htmlfile = self.add_header(genome_file)
         htmlfile += self.add_javascript_code(gene_file, variant_file, genome_file)
         htmlfile += self.add_footer()
-        f= open(output_dir+"/igv_output/index.html", "w")
-        f.write(htmlfile)
-        f.close()   
-        
-
-vu = variationutils()
-vu.prepare_genome(".","./igv_output/data/GCA_009858895.3_ASM985889v3_genomic.gbff_genome_assembly.fa")
-#vu.copy_file("/home/manish//Desktop/apps/Variation_Viewer/deps/igv_output/data/original_snps.vcf.gz", "/home/manish/Desktop/apps/Variation_Viewer/lib/Variation_Viewer/Utils/igv_output/data/original_snps.vcf.gz")
-vu.prepare_vcf(".","original_snps.vcf")
-#file = vu.create_html(".","gbk", "snp")
-#print(file)
+        try:
+            with open(output_dir+"/igv_output/index.html", "w") as outfile:
+                outfile.write(htmlfile)
+        except IOError:
+            print("can't create index.html file")
