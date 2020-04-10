@@ -83,10 +83,10 @@ class Variation_Viewer:
         dest = outputdir +"/igv_output"
 
         try:
-           logging.info('Copying directory: %s to %s', src, dst)
-           shutil.copytree(src, dst)
+           logging.info('Copying directory: %s to %s', src, dest)
+           shutil.copytree(src, dest)
         except (shutil.Error, OSError) as e:
-           raise ActionError('Unable to copy %s to %s: %s' % (src, dst, str(e)))  
+           raise ActionError('Unable to copy %s to %s: %s' % (src, dest, str(e)))  
 
         #shutil.copytree(src,dest)
         self.vu.copy_file(genome_path, outputdir+"/igv_output/data/"+genome_file)
