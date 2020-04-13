@@ -12,9 +12,11 @@ class downloaddatautils:
         self.vu = VariationUtil(self.callbackURL)
         pass
 
-    def download_genome(self, params):
+    #def download_genome(self, params):
+    def download_genome(self, assembly_ref):
         file = self.au.get_assembly_as_fasta({
-          'ref': params['genome_or_assembly_ref']
+          'ref': assembly_ref
+          #'ref': params['genome_or_assembly_ref']
         })
         return file
 

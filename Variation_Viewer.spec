@@ -11,7 +11,6 @@ module Variation_Viewer {
     typedef structure{
         string vcf_ref;
         string workspace_name;
-        string genome_or_assembly_ref;
     } InputParams;
 
 

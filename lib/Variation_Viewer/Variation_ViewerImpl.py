@@ -9,6 +9,7 @@ from Variation_Viewer.Utils.variationutils import variationutils
 from Variation_Viewer.Utils.downloaddatautils import downloaddatautils
 from Variation_Viewer.Utils.genomeutils import genomeutils
 from installed_clients.KBaseReportClient import KBaseReport
+from installed_clients.WorkspaceClient import Workspace as Workspace
 #END_HEADER
 
 
@@ -44,6 +45,7 @@ class Variation_Viewer:
         self.vu = variationutils()
         self.du = downloaddatautils()
         self.gu = genomeutils()
+        self.config = config
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
         #END_CONSTRUCTOR
@@ -69,7 +71,17 @@ class Variation_Viewer:
         os.mkdir(outputdir)
 
         logging.info("Downlading assembly ...")
-        genome_info = self.du.download_genome(params)
+
+        self.ws_url = self.config['workspace-url']
+        self.ws = Workspace(self.ws_url, token=ctx['token'])
+        variation_ref= params['vcf_ref']
+        variation_obj = self.ws.get_objects2({'objects': [{'ref':variation_ref}]})['data'][0]
+        
+        #assembly_ref = variation_obj.get('assembly_ref') 
+        assembly_ref= variation_obj['data']['assemby_ref']
+        genome_info = self.du.download_genome(assembly_ref)
+        
+        #genome_info = self.du.download_genome(params)
         genome_path = genome_info['path']
         genome_file = genome_path.split("/")[-1]
 
